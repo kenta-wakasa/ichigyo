@@ -11,3 +11,9 @@ GeneratedPluginRegistrant.java
 key.properties
 **/*.keystore
 **/*.jks
+
+release.properties
+service-account-ke.json
+
+
+

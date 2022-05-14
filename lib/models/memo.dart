@@ -23,15 +23,13 @@ class Memo extends HiveObject {
 
   Memo copyWith({
     String? text,
-    DateTime? createdAt,
-    DateTime? updatedAt,
     List<String>? tags,
     bool? isLike,
   }) {
     return Memo(
       text: text ?? this.text,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
+      createdAt: createdAt,
+      updatedAt: DateTime.now(),
       tags: tags ?? this.tags,
       isLike: isLike ?? this.isLike,
     );

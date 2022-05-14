@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../configs/app_theme.dart';
@@ -30,9 +31,25 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> initialize() async {
+    // memosが更新されたら再描画する
     HiveManager.instance.memos.watch().listen((event) => setState(() {}));
-    await Future<void>.delayed(const Duration(milliseconds: 1000));
+
+    // ちょっと待つ
+    await Future<void>.delayed(const Duration(milliseconds: 500));
+
+    // TextFormFieldにフォーカスを当てる
     focusNode.requestFocus();
+    WidgetsBinding.instance.addObserver(LifecycleEventHandler(
+      resumeCallBack: () async {
+        // 待機状態から復帰したときにTextFormFieldにフォーカスを当てる
+        focusNode.unfocus();
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+        focusNode.requestFocus();
+        // FIXME:requestFocusを呼ぶとなぜか空白文字が入るのでclearする
+        textEditingController.clear();
+      },
+      suspendingCallBack: () async {},
+    ));
   }
 
   /// データベースにメモを追加する
@@ -110,5 +127,28 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+}
+
+class LifecycleEventHandler extends WidgetsBindingObserver {
+  LifecycleEventHandler({
+    required this.resumeCallBack,
+    required this.suspendingCallBack,
+  });
+  final AsyncCallback resumeCallBack;
+  final AsyncCallback suspendingCallBack;
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        await resumeCallBack();
+        break;
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.paused:
+      case AppLifecycleState.detached:
+        await suspendingCallBack();
+        break;
+    }
   }
 }

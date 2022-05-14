@@ -46,5 +46,8 @@ class MemoAdapter extends TypeAdapter<Memo> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is MemoAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+      identical(this, other) ||
+      other is MemoAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

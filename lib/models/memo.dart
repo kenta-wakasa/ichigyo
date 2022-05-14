@@ -13,9 +13,10 @@ class Memo extends HiveObject {
     this.isLike = false,
   });
 
-  factory Memo.create({required String text}) {
+  factory Memo.create({required String text, List<String> tags = const []}) {
     return Memo(
       text: text,
+      tags: tags,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     );

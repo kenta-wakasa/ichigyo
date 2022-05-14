@@ -17,6 +17,8 @@ class _HomePageState extends State<HomePage> {
   late final textEditingController = TextEditingController()..addListener(() => setState(() {}));
   final focusNode = FocusNode();
 
+  List<Memo> get memos => HiveManager.instance.fetchMemo(tags: {'こんぶ'});
+
   @override
   void initState() {
     super.initState();
@@ -74,16 +76,13 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               Expanded(
-                child: SingleChildScrollView(
+                child: ListView.builder(
                   reverse: true,
-                  child: Column(
-                    children: HiveManager.instance
-                        .fetchMemo()
-                        .map(
-                          (e) => MemoTile(memo: e),
-                        )
-                        .toList(),
-                  ),
+                  itemCount: memos.length,
+                  itemBuilder: (context, index) {
+                    final memo = memos[index];
+                    return MemoTile(memo: memo);
+                  },
                 ),
               ),
               Padding(

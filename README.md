@@ -11,6 +11,10 @@
 下記のリンクから誰でも参加可能です。  
 https://testflight.apple.com/join/mClKpp4S
 
+# HiveObject の生成
+
+`flutter packages pub run build_runner build --delete-conflicting-outputs`
+
 # アイコンの生成
 
 `flutter pub run flutter_launcher_icons:main`
